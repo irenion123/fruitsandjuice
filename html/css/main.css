@@ -1,0 +1,25 @@
+html, body {
+	height: 98%;
+}
+
+.logo {
+    width: 4em;
+}
+
+.icon {
+	color: #fc9905;
+	width: 3em;
+}
+
+.copyright {
+	float : right;
+}
+
+footer {
+	background-color: #f7f7f7;
+	color: #fff
+}
+
+.fa-instagram, .fa-whatsapp{
+	color: #fc9905;
+}
