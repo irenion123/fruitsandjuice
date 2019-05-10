@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block menu %}
+    {% include "fruitandjuice/menu.html" with active_tab='tab2' %}
+{% endblock %}
 {% block content %}
     <div class="container">
         <h2>Контактная информация</h2>

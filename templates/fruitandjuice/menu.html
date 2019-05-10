@@ -1,0 +1,24 @@
+<ul class="topmenu navbar-nav btn-group" role="group" aria-label="Basic example">
+    <li class="nav-item dropdown m-1">
+        <a class="dropdown-toggle btn btn-primary {% if active_tab == 'tab1' %} active{% endif %}"
+           href="#"
+           id="asortiDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Меню</a>
+        <div class="dropdown-menu" aria-labelledby="asortiDropdown">
+            {% for item in categories_menu %}
+                <a class="dropdown-item" href="{% url 'fruitsandjuice:home' %}#{{ item.anchor }}">{{ item.name }}</a>
+            {% endfor %}
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'fruitsandjuice:home' %}">Распродажа</a>
+
+        </div>
+    </li>
+    <li class="nav-item m-1">
+        <a class="btn btn-primary {% if active_tab == 'tab2' %} active{% endif %}"
+           href="{% url 'fruitsandjuice:about' %}">О Нас</a>
+    </li>
+    <li class="nav-item m-1">
+        <a class="btn btn-primary {% if active_tab == 'tab3' %} active{% endif %}"
+           href="{% url 'fruitsandjuice:shippay' %}">Доставка и оплата</a>
+    </li>
+</ul>
+

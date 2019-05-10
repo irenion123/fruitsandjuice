@@ -17,6 +17,7 @@ class Country(models.Model):
 
 class ProductCategory(models.Model):
     name = models.CharField(verbose_name='Категория', max_length=25)
+    anchor = models.CharField(verbose_name='Якорь для меню', max_length=10, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -32,6 +33,7 @@ class Product(models.Model):
     price = models.DecimalField(verbose_name='Цена', max_digits=8, decimal_places=2)
     country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.SET_NULL)
     unit_product = models.ForeignKey('UnitsProduct', on_delete=models.CASCADE)
+    sale = models.BooleanField(default=False)
 
 
     def __str__(self):
