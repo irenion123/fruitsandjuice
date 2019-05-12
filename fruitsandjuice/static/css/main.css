@@ -3,7 +3,7 @@ html, body {
 }
 
 .logo {
-    width: 4em;
+    width: 3em;
 }
 
 .icon {
@@ -22,4 +22,16 @@ footer {
 
 .fa-instagram, .fa-whatsapp{
 	color: #fc9905;
+}
+
+.mt-7 {
+	margin-top: 100px !important;
+}
+label.error_small {
+	color: red;
+	font-size: 9px;
+}
+
+input.error_small {
+	margin-bottom: 0px !important;
 }
