@@ -38,24 +38,9 @@
                     </div>
                     <div class="dropdown-divider"></div>
                     <div class="ml-auto btn-group">
-                        {% if user.is_authenticated %}
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#cartModalCenter"><img class="fas fa-shopping-cart fa-1x"></button>
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#profileModalCenter">{{ user }}</button>
-                            <a  class="btn btn-primary" href="{% url 'fruitsandjuice:logout' %}" role="button">
-                                 Выйти
-                            </a>
-                        {% else %}
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#loginModalCenter">
-                                Войти
-                            </button>
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#regModalCenter">
-                                Зарегистрироваться
-                            </button>
-                        {% endif %}
+                        {% block ext_menu %}
+                            {% include "fruitandjuice/ext_menu.html" with active_tab='' %}
+                        {% endblock %}
                     </div>
                 </div>
             </div>

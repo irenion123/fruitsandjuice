@@ -7,8 +7,9 @@ from fruitsandjuice.views import (
     HomeRedirectView,
     RegistrationView,
     RegistrationSucessView,
+    CartView,
     activate,
-    logout, login_view)
+    logout, login_view, AddCartView, RemoveCartItemView)
 
 app_name = 'fruitsandjuice'
 
@@ -20,6 +21,9 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
     path('shippay/', ShippayView.as_view(), name='shippay'),
     path('registration/', RegistrationView.as_view(), name='registration'),
+    path('cart/', CartView.as_view(), name='cart'),
+    path('cart/add/', AddCartView.as_view(), name='add_cart'),
+    path('cart/remove/', RemoveCartItemView.as_view(), name='remove_cart'),
     path('sucess_registration/', RegistrationSucessView.as_view(), name='success_registration'),
     re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
             activate, name='activate')

@@ -1,0 +1,19 @@
+
+    {% if user.is_authenticated %}
+        <a class="btn btn-primary {% if active_tab == 'ext_tab1' %} active{% endif %}"  href="{% url 'fruitsandjuice:cart' %}" role="button"><img
+                class="fas fa-shopping-cart fa-1x"></a>
+        <button type="button" class="btn btn-primary {% if active_tab == 'ext_tab2' %} active{% endif %}" data-toggle="modal"
+                data-target="#profileModalCenter">{{ user }}</button>
+        <a class="btn btn-primary" href="{% url 'fruitsandjuice:logout' %}" role="button">
+            Выйти
+        </a>
+    {% else %}
+        <button type="button" class="btn btn-primary" {% if active_tab == 'ext_tab2' %} active{% endif %} data-toggle="modal"
+                data-target="#loginModalCenter">
+            Войти
+        </button>
+        <button type="button" class="btn btn-primary" {% if active_tab == 'tab3' %} active{% endif %} data-toggle="modal"
+                data-target="#regModalCenter">
+            Зарегистрироваться
+        </button>
+    {% endif %}

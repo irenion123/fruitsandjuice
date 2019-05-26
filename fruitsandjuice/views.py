@@ -7,6 +7,7 @@ from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMultiAlternatives
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
@@ -16,10 +17,11 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import TemplateView, RedirectView, ListView, View
 
 from fruitsandjuice.forms import UserCreationForm
-from fruitsandjuice.models import Product
+from fruitsandjuice.models import Product, Order, StatusChoice, OrderItem, DeliveryMethodChoice, PaymentMethodChoice
 from fruitsandjuice.tokens import account_activation_token
 
 User = get_user_model()
+
 
 class HomeRedirectView(RedirectView):
     permanent = False
@@ -52,9 +54,53 @@ class AboutView(TemplateView):
 class ShippayView(TemplateView):
     template_name = 'fruitandjuice/shippay.html'
 
+
 class RegistrationSucessView(TemplateView):
     template_name = 'fruitandjuice/success_registration.html'
 
+
+class CartView(ListView):
+    template_name = 'fruitandjuice/cart.html'
+    model = Order
+    context_object_name = 'carts'
+
+    def get_queryset(self):
+        return Order.objects.filter(status=StatusChoice.FM.name, user_name=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        id_carts = context['carts']
+        if id_carts:
+            pk_cart = id_carts[0]
+            context['delivery'] = [e for e in DeliveryMethodChoice]
+            context['payment'] = [e for e in PaymentMethodChoice]
+            context['cart_items'] = OrderItem.objects.filter(order=pk_cart)
+            context['summ_items'] = OrderItem.objects.filter(order=pk_cart).aggregate(Sum('product__price'))
+        return context
+
+class AddCartView(View):
+    def post(self, request, *args, **kwargs):
+        print('request: ', request.POST.get('item', None))
+        item = request.POST.get('item', None)
+        if item:
+            cart, created = Order.objects.get_or_create(user_name=request.user, status=StatusChoice.FM.name)
+            try:
+                product = Product.objects.get(pk=int(item))
+            except Product.DoesNotExist:
+                return HttpResponse(status=404)
+            item = OrderItem(order=cart, product=product)
+            item.save()
+        return HttpResponse('ОК', status=201)
+
+class RemoveCartItemView(View):
+    def post(self, request, *args, **kwargs):
+        print('request: ', request.POST.get('item', None))
+        item = request.POST.get('item', None)
+        if item:
+            OrderItem.objects.filter(pk=int(item)).delete()
+            return HttpResponse(status=204)
+        return  HttpResponse(status=404)
 
 class RegistrationView(View):
     def post(self, request, *args, **kwargs):
@@ -88,6 +134,7 @@ class RegistrationView(View):
             return HttpResponse(form.errors.as_json(), content_type="application/json",
                                 status=409)
 
+
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -103,6 +150,7 @@ def activate(request, uidb64, token):
     else:
         return HttpResponse('Activation link is invalid!')
 
+
 def login_view(request):
     if request.method == 'POST':
         print(request.POST)
@@ -116,8 +164,9 @@ def login_view(request):
             login(request, user)
         else:
             print('login err!!!')
-            return HttpResponse('{"message": "Неверный логин или пароль"}'.encode('utf-8'),content_type="application/json",
-                         status=403)
+            return HttpResponse('{"message": "Неверный логин или пароль"}'.encode('utf-8'),
+                                content_type="application/json",
+                                status=403)
     return HttpResponse(b'ok')
 
 
@@ -125,3 +174,8 @@ def login_view(request):
 def logout(request):
     django_logout(request)
     return HttpResponseRedirect(reverse('fruitsandjuice:home'))
+
+
+class AddItemOrder(View):
+    def post(self, request, *args, **kwargs):
+        print('Add item > request: ', request.POST)

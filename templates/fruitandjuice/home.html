@@ -46,10 +46,9 @@
                                      src="{{ item.productimages_set.first.image.url }}" width="250">
                                 <div class="card-body">
                                     <h4 class="card-title">{{ item.name }}</h4>
-                                    <h5 class="card-text">Цена
-                                        за {{ item.unit_product.name }} {{ item.unit_product.packaging }} {{ item.price }}
-                                        руб.</h5>
-                                    <a href="#" class="btn btn-primary">В КОРЗИНУ</a>
+                                    <h5 class="card-text">Цена: {{ item.price }} руб. <br> </h5>
+                                    <h6> за {{ item.unit_product.packaging }} {{ item.unit_product.name }}</h6>
+                                    <a href="#" value="{{ item.pk }}" class="btn btn-primary card_add">В КОРЗИНУ</a>
                                 </div>
                             </div>
                         </div>

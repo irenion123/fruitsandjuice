@@ -35,3 +35,9 @@ label.error_small {
 input.error_small {
 	margin-bottom: 0px !important;
 }
+
+.trash {
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -167,7 +167,7 @@ function login() {
 
             // handle a successful response
             success: function (json) {
-                $('#loginInputName').val('');
+                $('#loginInputName').val('')
 
                 $('#loginInputPassword').val('');
 
@@ -186,11 +186,58 @@ function login() {
     } else {
         objlogin_validate.focusInvalid();
 
-    };
+    }
+    ;
     return false;
+};
+
+function addProduct(e) {
+    console.log('addProduct: ' + $(this).val($(this).attr("value")));
+    e.preventDefault();
+    $.ajax({
+        url: "/cart/add/", // the endpoint
+        type: "POST", // http method
+        data: {
+            item: $(this).attr("value")
+        }, // data sent with the post request
+
+        // handle a successful response
+        success: function (json) {
+
+            console.log(json); // log the returned json to the console
+            console.log("success"); // another sanity check
+        },
+        // handle a non-successful response
+        error: function (xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+
+function removeProduct() {
+    console.log('removeProduct: ' + $(this).val($(this).attr("value")));
+
+    $.ajax({
+        url: "/cart/remove/", // the endpoint
+        type: "POST", // http method
+        data: {
+            item: $(this).attr("value")
+        }, // data sent with the post request
+
+        // handle a successful response
+        success: function (json) {
+
+            console.log(json); // log the returned json to the console
+            console.log("success"); // another sanity check
+        },
+        // handle a non-successful response
+        error: function (xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
 };
 
 $("#reg_post").click(registration);
 $("#login_post").click(login);
-
-
+$(".card_add").click(addProduct);
+$(".prod_remove").click(removeProduct);
