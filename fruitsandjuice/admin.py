@@ -38,9 +38,17 @@ class UnitsProductAdmin(admin.ModelAdmin):
     pass
 
 class OrderAdmin(admin.ModelAdmin):
+    list_display = ('pk',
+                    'user_name',
+                    'mobile',
+                    'payment_method',
+                    'adress',
+                    'status',
+                    'delivery_method')
     pass
 
 class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product')
     pass
 
 admin.site.register(ProductCategory, ProductCategoryAdmin)

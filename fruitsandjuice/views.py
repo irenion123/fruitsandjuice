@@ -10,6 +10,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_text, force_bytes
@@ -51,12 +52,41 @@ class AboutView(TemplateView):
     template_name = 'fruitandjuice/about.html'
 
 
+class OrderSuccessfulView(TemplateView):
+    template_name = 'fruitandjuice/order_success.html'
+
+
 class ShippayView(TemplateView):
     template_name = 'fruitandjuice/shippay.html'
 
 
+class ProfileView(TemplateView):
+    template_name = 'fruitandjuice/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['orders'] = Order.objects.filter(user_name=user)
+        return context
+
+
 class RegistrationSucessView(TemplateView):
     template_name = 'fruitandjuice/success_registration.html'
+
+
+class OrderView(View):
+
+    def post(self, request, *args, **kwargs):
+        print('request: ', request.POST)
+        pk = kwargs['pk']
+        order = Order.objects.get(pk=pk)
+        order.mobile = request.POST.get('mobile', '')
+        order.delivery_method = request.POST.get('delivery_method', '')
+        order.payment_method = request.POST.get('payment_method', '')
+        order.adress = request.POST.get('address', '')
+        order.status = StatusChoice.ACP.name
+        order.save()
+        return redirect('fruitsandjuice:order_success', pk=order.pk)
 
 
 class CartView(ListView):
@@ -75,9 +105,11 @@ class CartView(ListView):
             pk_cart = id_carts[0]
             context['delivery'] = [e for e in DeliveryMethodChoice]
             context['payment'] = [e for e in PaymentMethodChoice]
+            context['pk_kart'] = pk_cart
             context['cart_items'] = OrderItem.objects.filter(order=pk_cart)
             context['summ_items'] = OrderItem.objects.filter(order=pk_cart).aggregate(Sum('product__price'))
         return context
+
 
 class AddCartView(View):
     def post(self, request, *args, **kwargs):
@@ -93,6 +125,7 @@ class AddCartView(View):
             item.save()
         return HttpResponse('ОК', status=201)
 
+
 class RemoveCartItemView(View):
     def post(self, request, *args, **kwargs):
         print('request: ', request.POST.get('item', None))
@@ -100,7 +133,8 @@ class RemoveCartItemView(View):
         if item:
             OrderItem.objects.filter(pk=int(item)).delete()
             return HttpResponse(status=204)
-        return  HttpResponse(status=404)
+        return HttpResponse(status=404)
+
 
 class RegistrationView(View):
     def post(self, request, *args, **kwargs):

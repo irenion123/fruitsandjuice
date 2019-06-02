@@ -237,7 +237,16 @@ function removeProduct() {
     });
 };
 
+$('#inputDelivery').on('change', function() {
+  if(this.value == 'CR') {
+      $(".address").removeClass('d-none')
+  } else {
+      $(".address").addClass('d-none')
+  }
+});
+
 $("#reg_post").click(registration);
 $("#login_post").click(login);
 $(".card_add").click(addProduct);
 $(".prod_remove").click(removeProduct);
+

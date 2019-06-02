@@ -1,8 +1,5 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.forms.widgets import EmailInput
-
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 
 
 class UserCreationForm(forms.ModelForm):
@@ -28,14 +25,3 @@ class UserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-
-
-# class UserChangeForm(forms.ModelForm):
-#     password = ReadOnlyPasswordHashField()
-#
-#     class Meta:
-#         model = User
-#         fields = ('email', 'password', 'is_active', 'is_admin')
-#
-#     def clean_password(self):
-#         return self.initial["password"]

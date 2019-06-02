@@ -29,7 +29,8 @@
                         <td>{{ item.product.name }}</td>
                         <td>{{ item.product.unit_product }}</td>
                         <td>{{ item.product.price }} руб.</td>
-                        <td align="center"><a href="{% url 'fruitsandjuice:cart' %}" value="{{ item.pk }}" class="btn prod_remove"><img class="fas fa-trash-alt fa-1x"></a></td>
+                        <td align="center"><a href="{% url 'fruitsandjuice:cart' %}" value="{{ item.pk }}"
+                                              class="btn prod_remove"><img class="fas fa-trash-alt fa-1x"></a></td>
                     </tr>
                 {% endfor %}
                 <tr>
@@ -38,31 +39,43 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="col-md-4 mb-3">
-                <h4 for="telephonenumber">Мобильный телефон</h4>
-                <input type="text" class="form-control" id="telephonenumber" placeholder="89220005566" value=""
-                       required>
-            </div>
-            <form action="">
-            <div class="form-group col-md-5">
-                <h4 for="inputDelivery">Способ доставки:</h4>
-                <select id="inputDelivery" class="form-control">
-                    <option selected>Выбирете способ доставки</option>
-                    {% for ditem in delivery %}
-                        <option value="{{ ditem.name }}">{{ ditem.value }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group col-md-5">
-                <h4 for="inputPayment">Способ оплаты при получении:</h4>
-                <select id="inputPayment" class="form-control">
-                    <option selected>Выбирете способ оплаты</option>
-                    {% for pitem in payment %}
-                        <option value="{{ pitem.name }}">{{ pitem.value }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="button" class="btn btn-primary btn">Оформить</button>
+            <form name="order" action="{% url 'fruitsandjuice:order' pk=pk_kart.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="col-md-4 mb-3">
+                    <h4 for="telephonenumber">Мобильный телефон:</h4>
+                    <input name="mobile" type="text" class="form-control" id="telephonenumber" placeholder="9220005566"
+                           value=""
+                           required>
+                </div>
+                <div class="form-group col-md-5">
+                    <h4 for="inputDelivery">Способ доставки:</h4>
+                    <select name="delivery_method" id="inputDelivery" class="form-control">
+                        <option selected>Выбирете способ доставки</option>
+                        {% for ditem in delivery %}
+                            <option value="{{ ditem.name }}">{{ ditem.value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-5 mb-3 address d-none">
+                    <h4 for="address">Адресс доставки:</h4>
+                    <textarea name="address" type="text"
+                              class="form-control" id="address" placeholder="Москва, ул. Новогордская, д 3, кв 5"
+                              value="">
+
+                </textarea>
+                </div>
+                <div class="form-group col-md-5">
+                    <h4 for="inputPayment">Способ оплаты при получении:</h4>
+                    <select name="payment_method" id="inputPayment" class="form-control">
+                        <option selected>Выбирете способ оплаты</option>
+                        {% for pitem in payment %}
+                            <option value="{{ pitem.name }}">{{ pitem.value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn">Оформить</button>
+            </form>
+            <br>
         {% endif %}
 
     </div>
