@@ -7,8 +7,31 @@
 {% endblock %}
 {% block content %}
     <div class="container mt-7">
-        {% for item in orders %}
-            <p>{{ item.pk }} {{ item.mobile }} {{ item.get_status_display }} {{ item.get_delivery_method_display }}</p>
-        {% endfor %}
+        {% if not orders %}
+            <h2>У Вас еще нет заказов.</h2>
+            <h4>Добавьте что-нибудь из <a href="{% url 'fruitsandjuice:home' %}">меню</a></h4>
+        {% else %}
+            <h2>Заказы</h2>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">№ заказа</th>
+                    <th scope="col">Мобильный тел.</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Способ доставки</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in orders %}
+                    <tr>
+                        <th scope="row">{{ item.pk }}</th>
+                        <td>{{ item.mobile }}</td>
+                        <td>{{ item.get_status_display }}</td>
+                        <td>{{ item.get_delivery_method_display }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 {% endblock %}

@@ -41,3 +41,7 @@ input.error_small {
     margin-left: auto;
     margin-right: auto;
 }
+
+.badge {
+	background-color: #fc9905 !important;
+}

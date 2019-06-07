@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{{ pk }}
-</body>
-</html>
+{% extends 'base.html' %}
+{% block menu %}
+    {% include "fruitandjuice/menu.html" with active_tab='' %}
+{% endblock %}
+{% block ext_menu %}
+    {% include "fruitandjuice/ext_menu.html" with active_tab='ext_tab1' %}
+{% endblock %}
+{% block content %}
+    <div class="container mt-7">
+        <h4>Ура! Ваш заказ № {{ pk }} оформлен. Скоро для подтверждения с Вами свяжется наш менеджер. Статус заказа можно посмотреть в <a href="{% url 'fruitsandjuice:profile' %}">профиле</a></h4>
+        <h4>Можете продолжить свои покупки и добавть позиции товаров из <a href="{% url 'fruitsandjuice:home' %}">меню</a></h4>
+    </div>
+{% endblock %}

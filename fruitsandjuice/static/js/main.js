@@ -205,6 +205,9 @@ function addProduct(e) {
         success: function (json) {
 
             console.log(json); // log the returned json to the console
+            var textContent = $('#cartspan').text();
+            textContent = Number(textContent) + 1;
+            $('#cartspan').text(textContent);
             console.log("success"); // another sanity check
         },
         // handle a non-successful response
@@ -237,12 +240,12 @@ function removeProduct() {
     });
 };
 
-$('#inputDelivery').on('change', function() {
-  if(this.value == 'CR') {
-      $(".address").removeClass('d-none')
-  } else {
-      $(".address").addClass('d-none')
-  }
+$('#inputDelivery').on('change', function () {
+    if (this.value == 'CR') {
+        $(".address").removeClass('d-none')
+    } else {
+        $(".address").addClass('d-none')
+    }
 });
 
 $("#reg_post").click(registration);

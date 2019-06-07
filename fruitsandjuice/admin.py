@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-
 from fruitsandjuice.models import (
     ProductCategory,
     Product,
@@ -23,6 +22,20 @@ class ImagesInline(admin.TabularInline):
         return extra
 
 
+class CartsInline(admin.TabularInline):
+    model = OrderItem
+    can_delete = True
+    fields = ('product', 'model_admin_callable', )
+    readonly_fields = ('model_admin_callable', )
+
+    def model_admin_callable(self, obj):
+        return obj.product.unit_product
+
+    def get_extra(self, request, obj=None, **kwargs):
+        extra = 0
+        return extra
+
+
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ImagesInline]
 
@@ -34,8 +47,10 @@ class ProductImagesAdmin(admin.ModelAdmin):
 class CountryAdmin(admin.ModelAdmin):
     pass
 
+
 class UnitsProductAdmin(admin.ModelAdmin):
     pass
+
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('pk',
@@ -45,11 +60,12 @@ class OrderAdmin(admin.ModelAdmin):
                     'adress',
                     'status',
                     'delivery_method')
-    pass
+    inlines = [CartsInline, ]
+
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('order', 'product')
-    pass
+
 
 admin.site.register(ProductCategory, ProductCategoryAdmin)
 admin.site.register(Product, ProductAdmin)
