@@ -25,15 +25,19 @@ class ImagesInline(admin.TabularInline):
 class CartsInline(admin.TabularInline):
     model = OrderItem
     can_delete = True
-    fields = ('product', 'model_admin_callable', )
-    readonly_fields = ('model_admin_callable', )
+    fields = ('product', 'unit_product_admin', 'price_admin',)
+    readonly_fields = ('unit_product_admin', 'price_admin',)
 
-    def model_admin_callable(self, obj):
+    def unit_product_admin(self, obj):
         return obj.product.unit_product
+
+    def price_admin(self, obj):
+        return obj.product.price
 
     def get_extra(self, request, obj=None, **kwargs):
         extra = 0
         return extra
+
 
 
 class ProductAdmin(admin.ModelAdmin):
